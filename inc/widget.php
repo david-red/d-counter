@@ -26,6 +26,11 @@ class DC_Widget extends WP_Widget
 	 */
 	public function widget( $args, $instance )
 	{
+		if ( ! empty( $instance['title'] ) )
+		{
+			echo $args['before_title'] . $instance['title']. $args['after_title'];
+		}
+
 		printf( '
 			<p><b>%s:</b> %d</p>
 			<p><b>%s:</b> %d</p>',
@@ -45,9 +50,14 @@ class DC_Widget extends WP_Widget
 	 */
 	public function form( $instance )
 	{
+		$title  = esc_attr( $instance['title'] );
 		$total  = esc_attr( $instance['total_visits'] );
 		$online = esc_attr( $instance['online'] );
 		?>
+		<p>
+			<label><?php _e( 'Title', 'dc' ); ?>:</label>
+			<input type="text" value="<?php echo $title; ?>" name="<?php echo $this->get_field_name( 'title' ); ?>">
+		</p>
 		<p>
 			<label><?php _e( 'Total visits', 'dc' ); ?>:</label>
 			<input type="text" value="<?php echo $total; ?>" name="<?php echo $this->get_field_name( 'total_visits' ); ?>">
@@ -70,6 +80,7 @@ class DC_Widget extends WP_Widget
 	public function update( $new_instance, $old_instance )
 	{
 		$instance                   = $old_instance;
+		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['total_visits']   = strip_tags( $new_instance['total_visits'] );
 		$instance['online']         = strip_tags( $new_instance['online'] );
 
