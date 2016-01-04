@@ -30,7 +30,7 @@ class DC_Widget extends WP_Widget
 			<p><b>%s:</b> %d</p>
 			<p><b>%s:</b> %d</p>',
 			$instance['total_visits'],
-			empty( sl_setting( 'total_hit' ) ) ? 0 : sl_setting( 'total_hit' ),
+			D_Counter::sl_setting( 'total_hit' ) ? D_Counter::sl_setting( 'total_hit' ) : 1,
 			$instance['online'],
 			D_Counter::online()
 		);

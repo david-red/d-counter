@@ -21,8 +21,8 @@ class D_Counter
 
 		if ( ! isset( $_SESSION['visited'] ) )
 		{
-			$total_hit = empty( sl_setting( 'total_hit' ) ) ? 0 : sl_setting( 'total_hit' );
-			update_setting( 'total_hit', $total_hit );
+			$total_hit = self::sl_setting( 'total_hit' ) ? self::sl_setting( 'total_hit' ) : 1;
+			self::update_setting( 'total_hit', $total_hit + 1 );
 			$_SESSION['visited'] = 'yes';
 		}
 		self::set_visitors();
@@ -68,6 +68,37 @@ class D_Counter
 		$visitors = get_option( 'visitors_online', true );
 
 		return empty( $visitors ) ? 1 : count( $visitors );
+	}
+
+	/**
+	 * Select a setting
+	 *
+	 * @param string $name
+	 *
+	 * @return mixed
+	 */
+	static function sl_setting( $name )
+	{
+		$settings = get_option( 'd-settings' );
+		return isset( $settings[$name] ) ? $settings[$name] : '';
+	}
+
+	/**
+	 * Update a setting
+	 *
+	 * @param string $name
+	 * @param mixed $value
+	 *
+	 * @return void
+	 */
+	static function update_setting( $name, $value )
+	{
+		$settings = get_option( 'd-settings' );
+		if ( ! empty( $settings[$name] ) )
+		{
+			$settings[$name] = $value;
+			update_option( 'd-settings', $settings );
+		}
 	}
 }
 
